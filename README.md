@@ -25,7 +25,7 @@ This guide provides step-by-step instructions to self-host [n8n](https://n8n.io)
 
 Run the following command to start n8n in Docker. Replace your-domain.com with your actual domain name:
 
-    ```bash
+    
     sudo docker run -d --restart unless-stopped -it \
     --name n8n \
     -p 5678:5678 \
@@ -34,11 +34,11 @@ Run the following command to start n8n in Docker. Replace your-domain.com with y
     -e WEBHOOK_URL="https://your-domain.com/" \
     -v ~/.n8n:/root/.n8n \
     n8nio/n8n
-    ```
+   
 
 Or if you are using a subdomain, it should look like this:
 
-    ```bash
+   
     sudo docker run -d --restart unless-stopped -it \
     --name n8n \
     -p 5678:5678 \
@@ -47,7 +47,7 @@ Or if you are using a subdomain, it should look like this:
     -e WEBHOOK_URL="https://subdomain.your-domain.com/" \
     -v ~/.n8n:/root/.n8n \
     n8nio/n8n
-    ```
+   
 
 
 This command does the following:
