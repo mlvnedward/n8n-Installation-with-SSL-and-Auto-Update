@@ -1,4 +1,4 @@
-# Self-Hosting SSL enabled N8N on a Linux Server
+# Self-Hosting SSL enabled N8N on a Linux Server - Melvin Edward
 
 This guide provides step-by-step instructions to self-host [n8n](https://n8n.io), a free and open-source workflow automation tool, on a Linux server using Docker, Nginx, and Certbot for SSL with a custom domain name.
 
