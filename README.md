@@ -118,7 +118,7 @@ Once completed, n8n will be accessible securely over HTTPS at your-domain.com.
 
 ## Step 6: Auto Update Using Watchtower
 ```bash
-    sudo docker run -d \
+sudo docker run -d \
   --name watchtower \
   -v /var/run/docker.sock:/var/run/docker.sock \
   containrrr/watchtower \
