@@ -121,9 +121,8 @@ Once completed, n8n will be accessible securely over HTTPS at your-domain.com.
 sudo docker run -d \
   --name watchtower \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  containrrr/watchtower \
-  n8nio/n8n --cleanup
-  ```
+  containrrr/watchtower n8n --cleanup --interval 86400
+```
 ## Important Notes:
 - Ensure your domain's DNS A record points to your server's IP address.
 - Allow ports 80 (HTTP), 443 (HTTPS), and 5678 (n8n) in your server's firewall.
