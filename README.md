@@ -118,10 +118,14 @@ Once completed, n8n will be accessible securely over HTTPS at your-domain.com.
 
 ## Step 6: Auto Update Using Watchtower
 ```bash
-docker run -d \
+sudo docker run -d \
   --name watchtower \
+  --restart unless-stopped \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  containrrr/watchtower n8n watchtower --cleanup --interval 86400
+  containrrr/watchtower \
+  --cleanup \
+  --interval 86400 \
+  n8n watchtower
 ```
 ## Important Notes:
 - Ensure your domain's DNS A record points to your server's IP address.
