@@ -123,7 +123,6 @@ sudo docker run -d \
   --restart unless-stopped \
   -v /var/run/docker.sock:/var/run/docker.sock \
   containrrr/watchtower \
-  --cleanup \
   --interval 86400 \
   n8n watchtower
 ```
