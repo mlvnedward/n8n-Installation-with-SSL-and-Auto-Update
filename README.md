@@ -76,19 +76,23 @@ Configure Nginx to reverse proxy the n8n web interface:
 
 2. **Paste the Following Configuration:**
     ```bash
+    
     server {
-        listen 80;
-        server_name your-domain.com;
+    listen 80;
+    server_name your-domain.com;
 
-        location / {
-            proxy_pass http://localhost:5678;
-            proxy_http_version 1.1;
-            chunked_transfer_encoding off;
-            proxy_buffering off;
-            proxy_cache off;
-        }
+    location / {
+        proxy_pass http://localhost:5678;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        chunked_transfer_encoding off;
+        proxy_buffering off;
+        proxy_cache off;
     }
-    ```
+}
+ 
+  ```
     Replace your-domain.com with your actual domain.
 
 3. **Enable the Configuration:**
