@@ -92,7 +92,7 @@ Configure Nginx to reverse proxy the n8n web interface:
     }
    }
 
-```
+    ```
     Replace your-domain.com with your actual domain.
 
 3. **Enable the Configuration:**
