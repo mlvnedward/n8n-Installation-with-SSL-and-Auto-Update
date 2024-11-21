@@ -77,7 +77,7 @@ Configure Nginx to reverse proxy the n8n web interface:
 2. **Paste the Following Configuration:**
     ```bash
     
-    server {
+   server {
     listen 80;
     server_name your-domain.com;
 
