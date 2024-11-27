@@ -30,13 +30,27 @@
 Run the following command to start n8n in Docker, replacing `your-domain.com` with your actual domain or subdomain:
 
 ```bash
-sudo docker run -d --restart unless-stopped -it   --name n8n   -p 5678:5678   -e N8N_HOST="your-domain.com"   -e WEBHOOK_TUNNEL_URL="https://your-domain.com/"   -e WEBHOOK_URL="https://your-domain.com/"   -v ~/.n8n:/root/.n8n   n8nio/n8n
+sudo docker run -d --restart unless-stopped -it \
+  --name n8n \
+  -p 5678:5678 \
+  -e N8N_HOST="your-domain.com" \
+  -e WEBHOOK_TUNNEL_URL="https://your-domain.com/" \
+  -e WEBHOOK_URL="https://your-domain.com/" \
+  -v ~/.n8n:/root/.n8n \
+  n8nio/n8n
 ```
 
 Or, for a subdomain:
 
 ```bash
-sudo docker run -d --restart unless-stopped -it   --name n8n   -p 5678:5678   -e N8N_HOST="subdomain.your-domain.com"   -e WEBHOOK_TUNNEL_URL="https://subdomain.your-domain.com/"   -e WEBHOOK_URL="https://subdomain.your-domain.com/"   -v ~/.n8n:/root/.n8n   n8nio/n8n
+sudo docker run -d --restart unless-stopped -it \
+  --name n8n \
+  -p 5678:5678 \
+  -e N8N_HOST="subdomain.your-domain.com" \
+  -e WEBHOOK_TUNNEL_URL="https://subdomain.your-domain.com/" \
+  -e WEBHOOK_URL="https://subdomain.your-domain.com/" \
+  -v ~/.n8n:/root/.n8n \
+  n8nio/n8n
 ```
 
 This will expose n8n on port 5678, mount the persistent volume, and configure the environment variables.
@@ -98,7 +112,12 @@ To automatically update the n8n container with new images, install and run Watch
 
 1. **Run Watchtower in Docker:**
    ```bash
-   sudo docker run -d      --name watchtower      --restart unless-stopped      -v /var/run/docker.sock:/var/run/docker.sock      v2tec/watchtower      --interval 86400  # 24 hours check for updates
+   sudo docker run -d \
+     --name watchtower \
+     --restart unless-stopped \
+     -v /var/run/docker.sock:/var/run/docker.sock \
+     v2tec/watchtower \
+     --interval 86400  # 24 hours check for updates
    ```
 
    Explanation:
@@ -109,7 +128,13 @@ To automatically update the n8n container with new images, install and run Watch
    If you want Watchtower to automatically remove old images after updating the container, you can add the `--cleanup` flag:
 
    ```bash
-   sudo docker run -d      --name watchtower      --restart unless-stopped      -v /var/run/docker.sock:/var/run/docker.sock      v2tec/watchtower      --interval 86400      --cleanup
+   sudo docker run -d \
+     --name watchtower \
+     --restart unless-stopped \
+     -v /var/run/docker.sock:/var/run/docker.sock \
+     v2tec/watchtower \
+     --interval 86400 \
+     --cleanup
    ```
 
 ---
@@ -166,3 +191,4 @@ You can use Certbot to set up SSL for n8n with Nginx. If Certbot is not installe
 - **SSL**: Handled by Certbot with Nginx for secure communication.
 
 You now have a fully configured self-hosted n8n setup with SSL, automatic updates via Watchtower, and persistent data storage.
+
