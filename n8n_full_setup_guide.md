@@ -166,14 +166,3 @@ You can use Certbot to set up SSL for n8n with Nginx. If Certbot is not installe
 - **SSL**: Handled by Certbot with Nginx for secure communication.
 
 You now have a fully configured self-hosted n8n setup with SSL, automatic updates via Watchtower, and persistent data storage.
-
----
-
-### How to Upload to GitHub
-
-1. **Create a new GitHub repository**.
-2. **Create a new file** in the repository called `README.md`.
-3. **Copy and paste the entire content** above into the `README.md` file.
-4. **Commit and push** the changes to GitHub.
-
-Now, the guide is available in your GitHub repository for easy reference and sharing.
