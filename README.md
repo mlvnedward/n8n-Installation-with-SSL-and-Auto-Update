@@ -13,9 +13,6 @@
 
 ### SSH into Your Instance
 Once the instance is created, connect to it via SSH using the GCP Console or your terminal:
-```bash
-gcloud compute ssh --zone YOUR_ZONE YOUR_INSTANCE_NAME
-```
 
 ### Update System Packages
 Before you proceed, ensure your system is up to date:
