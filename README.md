@@ -40,7 +40,14 @@ echo '/dev/sda1 /mnt/disks/n8n-data ext4 defaults 0 2' | sudo tee -a /etc/fstab
 ### 2.3. Run n8n in Docker
 Run the following command to start n8n in Docker. Replace `your-domain.com` with your actual domain or subdomain:
 ```bash
-sudo docker run -d --restart unless-stopped -it   --name n8n   -p 5678:5678   -e N8N_HOST="your-domain.com"   -e WEBHOOK_TUNNEL_URL="https://your-domain.com/"   -e WEBHOOK_URL="https://your-domain.com/"   -v /mnt/disks/n8n-data:/root/.n8n   n8nio/n8n
+sudo docker run -d --restart unless-stopped -it \
+  --name n8n \
+  -p 5678:5678 \
+  -e N8N_HOST="your-domain.com" \
+  -e WEBHOOK_TUNNEL_URL="https://your-domain.com/" \
+  -e WEBHOOK_URL="https://your-domain.com/" \
+  -v /mnt/disks/n8n-data:/root/.n8n \
+  n8nio/n8n
 ```
 
 > **Important**: This setup ensures that your n8n data is stored on the GCP Persistent Disk under `/mnt/disks/n8n-data`.
@@ -115,13 +122,17 @@ sudo certbot renew --dry-run
 ### 6.1. Run Watchtower in Docker
 This will automatically update the n8n container every 24 hours.
 ```bash
-sudo docker run -d --name watchtower --restart unless-stopped   -v /var/run/docker.sock:/var/run/docker.sock   v2tec/watchtower --interval 86400  # Check for updates every 24 hours
+sudo docker run -d --name watchtower --restart unless-stopped \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  v2tec/watchtower --interval 86400  # Check for updates every 24 hours
 ```
 
 ### 6.2. Optional: Enable Cleanup of Old Images
 If you want Watchtower to automatically remove old images after updating the container, use the `--cleanup` flag:
 ```bash
-sudo docker run -d --name watchtower --restart unless-stopped   -v /var/run/docker.sock:/var/run/docker.sock   v2tec/watchtower --interval 86400 --cleanup
+sudo docker run -d --name watchtower --restart unless-stopped \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  v2tec/watchtower --interval 86400 --cleanup
 ```
 
 ---
