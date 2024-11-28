@@ -1,151 +1,190 @@
-# Self-Hosting SSL-Enabled n8n with Watchtower Integration on Google Cloud Platform (GCP)
+
+# Self-Hosting SSL-Enabled n8n with Watchtower on Google Cloud Platform (GCP)
+
+This guide details how to deploy n8n on GCP with SSL and Watchtower integration while ensuring data persistence.
+
+---
 
 ## Step 1: Prepare Your GCP Instance
 
 ### Create an Instance
-1. Log into GCP Console and navigate to Compute Engine.
-2. Click **Create Instance**.
-3. Choose the following settings:
-   - **Machine Type**: Select the `e2-micro` type (eligible for the free tier).
-   - **Boot Disk**: Select `Ubuntu 20.04 LTS` or `Ubuntu 22.04 LTS`.
-   - **Firewall**: Allow `HTTP` and `HTTPS` traffic.
-4. Create the Instance.
+1. Go to the GCP Console → Compute Engine → VM Instances → Create Instance.
+2. Use the following settings:
+   - **Machine Type**: `e2-micro` (Free tier eligible).
+   - **Boot Disk**: Ubuntu 22.04 LTS (recommended) or 20.04 LTS.
+   - **Firewall**: Enable `Allow HTTP traffic` and `Allow HTTPS traffic`.
 
-### SSH into Your Instance
-Once the instance is created, connect to it via SSH using the GCP Console or your terminal:
+### Connect to the Instance via SSH
+1. Use the SSH button in the GCP console or your terminal:
+   ```bash
+   gcloud compute ssh <instance-name>
+   ```
+2. Update system packages:
+   ```bash
+   sudo apt update && sudo apt upgrade -y
+   ```
 
-### Update System Packages
-Before you proceed, ensure your system is up to date:
-```bash
-sudo apt update && sudo apt upgrade -y
-```
+---
 
 ## Step 2: Install Docker and Docker-Compose
 
 ### Install Docker
-Run the following commands to install Docker and Docker Compose:
 ```bash
-sudo apt install -y docker.io docker-compose
+sudo apt install -y docker.io
 sudo systemctl enable docker
 ```
 
-### Verify Docker Installation
-To confirm Docker is installed correctly, run:
+### Install Docker Compose
+```bash
+sudo apt install -y docker-compose
+```
+
+### Verify Installation
 ```bash
 docker --version
+docker-compose --version
 ```
 
-## Step 3: Set Up Docker Compose for n8n
+---
 
-### Create a Directory for n8n
-Create a directory to store all your n8n files and configurations:
+## Step 3: Set Up n8n with Docker Compose
+
+### Create Directories for n8n
 ```bash
 mkdir ~/n8n-docker && cd ~/n8n-docker
+mkdir -p /home/<your-username>/n8n-data
+sudo chown -R 1000:1000 /home/<your-username>/n8n-data
 ```
 
-### Set Up Persistent Volume for n8n Data
-Ensure your n8n workflows are stored persistently:
-```bash
-mkdir -p ~/.n8n
-```
+### Create a `docker-compose.yml` File
+1. Create the file:
+   ```bash
+   nano docker-compose.yml
+   ```
+2. Add the following configuration:
+   ```yaml
+   version: "3.1"
 
-### Create docker-compose.yml File
-In the `~/n8n-docker` directory, create and edit a new `docker-compose.yml` file:
-```bash
-nano docker-compose.yml
-```
+   services:
+     n8n:
+       image: n8nio/n8n:latest
+       container_name: n8n
+       restart: unless-stopped
+       ports:
+         - "5678:5678"
+       environment:
+         - N8N_HOST=your-domain.com
+         - WEBHOOK_TUNNEL_URL=https://your-domain.com/
+         - WEBHOOK_URL=https://your-domain.com/
+       volumes:
+         - ${N8N_DATA_PATH}:/home/node/.n8n
+   ```
 
-### Add the following content to the file (replace your-domain.com with your domain):
-```yaml
-version: "3.1"
+### Create an `.env` File
+1. Create the file:
+   ```bash
+   nano .env
+   ```
+2. Add the following line:
+   ```bash
+   N8N_DATA_PATH=/home/<your-username>/n8n-data
+   ```
 
-services:
-  n8n:
-    image: n8nio/n8n:latest
-    container_name: n8n
-    restart: unless-stopped
-    ports:
-      - "5678:5678"
-    environment:
-      - N8N_HOST=your-domain.com
-      - WEBHOOK_TUNNEL_URL=https://your-domain.com/
-      - WEBHOOK_URL=https://your-domain.com/
-    volumes:
-      - ~/.n8n:/root/.n8n
-```
+---
 
-### Start n8n Container Using Docker Compose
-To start the n8n container, run:
-```bash
-docker-compose up -d
-```
-
-## Step 4: Install and Configure Nginx for SSL and Reverse Proxy
+## Step 4: Configure Nginx for SSL and Reverse Proxy
 
 ### Install Nginx
-Install Nginx to set up a reverse proxy for n8n and to handle SSL encryption:
 ```bash
 sudo apt install -y nginx
 ```
 
-### Configure Nginx for Reverse Proxy
-Create an Nginx configuration file for your domain:
-```bash
-sudo nano /etc/nginx/sites-available/n8n
-```
+### Configure Nginx
+1. Create a configuration file:
+   ```bash
+   sudo nano /etc/nginx/sites-available/n8n
+   ```
+2. Add the following content (replace `your-domain.com` with your domain):
+   ```nginx
+   server {
+       listen 80;
+       server_name your-domain.com;
 
-### Add the following content (replace your-domain.com with your domain):
-```nginx
-server {
-    listen 80;
-    server_name your-domain.com;
+       location / {
+           proxy_pass http://localhost:5678;
+           proxy_http_version 1.1;
+           proxy_set_header Upgrade $http_upgrade;
+           proxy_set_header Connection 'upgrade';
+           proxy_set_header Host $host;
+           proxy_cache_bypass $http_upgrade;
+       }
+   }
+   ```
 
-    location / {
-        proxy_pass http://localhost:5678;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }
-}
-```
-
-### Enable Nginx Configuration
-Enable the Nginx configuration and reload:
+### Enable the Configuration
 ```bash
 sudo ln -s /etc/nginx/sites-available/n8n /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-## Step 5: Set Up SSL (Cloudflare or Certbot)
+---
 
-### Using Cloudflare for SSL
-If you're using Cloudflare for DNS and SSL:
-1. Sign up for Cloudflare and add your domain.
-2. Update your DNS settings to point to your GCP instance IP address.
-3. Enable Full (Strict) SSL mode in the Cloudflare SSL settings.
+## Step 5: Set Up SSL for Your Domain
 
-### Using Certbot for SSL (If Not Using Cloudflare)
-If you're not using Cloudflare and want to use Certbot for SSL, run:
-```bash
-sudo apt install -y certbot python3-certbot-nginx
-```
+### Option 1: Using Cloudflare
+1. Add your domain to Cloudflare.
+2. Update your DNS settings to point to your GCP instance's external IP address.
+3. Enable **Full (Strict)** SSL mode in Cloudflare.
 
-Then, run Certbot to configure SSL for your domain:
-```bash
-sudo certbot --nginx -d your-domain.com
-```
+### Option 2: Using Certbot
+1. Install Certbot:
+   ```bash
+   sudo apt install -y certbot python3-certbot-nginx
+   ```
+2. Generate SSL certificates:
+   ```bash
+   sudo certbot --nginx -d your-domain.com
+   ```
+3. Verify renewal with:
+   ```bash
+   sudo certbot renew --dry-run
+   ```
 
-## Step 6: Install and Configure Watchtower for Automatic Updates
+---
+
+## Step 6: Set Up Watchtower for Automatic Updates
 
 ### Install Watchtower
-To automatically update the n8n container, install Watchtower:
 ```bash
-docker run -d \
-    --name watchtower \
-    --restart unless-stopped \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    containrrr/watchtower --cleanup --schedule "0 3 * * *
+docker run -d     --name watchtower     --restart unless-stopped     -v /var/run/docker.sock:/var/run/docker.sock     containrrr/watchtower --cleanup --schedule "0 3 * * *"
+```
 
+---
+
+## Step 7: Verify and Test Your Setup
+
+### Access n8n
+Navigate to `https://your-domain.com` to access the n8n UI.
+
+### Test Workflow Persistence
+1. Create a workflow in n8n.
+2. Restart the container:
+   ```bash
+   docker-compose restart
+   ```
+3. Verify that the workflow persists.
+
+### Test Watchtower Updates
+Check Watchtower logs to ensure updates are being applied:
+```bash
+docker logs watchtower
+```
+
+---
+
+## Conclusion
+This setup provides:
+- **Persistent workflows and data** across updates.
+- **SSL-secured connections** for your n8n instance.
+- **Automatic updates** with Watchtower.
