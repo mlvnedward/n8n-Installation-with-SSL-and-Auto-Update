@@ -112,7 +112,7 @@ This guide outlines the steps to deploy n8n on a GCP instance using Docker, Dock
          - WEBHOOK_URL=https://your-domain.com/
          - GENERIC_TIMEZONE=Asia/Kolkata
        volumes:
-         - ~/n8n-data:/root/.n8n
+      - ~/n8n-data:/home/node/.n8n
    ```
 4. Save and close the file.
 
