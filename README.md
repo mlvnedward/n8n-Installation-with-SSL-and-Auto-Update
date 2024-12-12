@@ -233,7 +233,7 @@ This setup ensures a reliable, secure, and auto-updating n8n deployment on GCP.
 
 # Automatic System Update, Upgrade, and Reboot with Cron
 
-This guide outlines how to automatically update, upgrade, and restart your system using cron jobs on Ubuntu. The cron job will run daily without requiring manual intervention.
+This guide outlines how to automatically update, upgrade, and restart your system using cron jobs on Ubuntu. The cron job will run weekly without requiring manual intervention.
 
 ## Steps to Set Up
 
@@ -245,7 +245,7 @@ This guide outlines how to automatically update, upgrade, and restart your syste
 
 2. Add the following cron job to run the updates, upgrades, and restart your system. This example runs it every day at 2 AM:
    ```bash
-   0 2 * * * sudo apt update && sudo apt upgrade -y && sudo reboot
+   0 2 * * 0 sudo apt update && sudo apt upgrade -y && sudo reboot
    ```
 
 3. **Save and exit** the crontab editor:
@@ -285,7 +285,7 @@ If the update and upgrade commands run, and the system restarts without promptin
 - The cron job will automatically:
   - Run `sudo apt update` and `sudo apt upgrade -y`.
   - Restart the system with `sudo reboot` if necessary.
-- The system will execute the cron job daily at 2 AM without requiring password input because `sudo` permissions have been configured to allow these commands without a password.
+- The system will execute the cron job weekly at 2 AM without requiring password input because `sudo` permissions have been configured to allow these commands without a password.
 
 This setup ensures your system is regularly updated and rebooted without manual intervention.
 
