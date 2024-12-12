@@ -229,3 +229,63 @@ This guide outlines the steps to deploy n8n on a GCP instance using Docker, Dock
 - **Support**: If issues occur, inspect container logs (`docker logs n8n`) and check the configuration files.
 
 This setup ensures a reliable, secure, and auto-updating n8n deployment on GCP.
+
+
+# Automatic System Update, Upgrade, and Reboot with Cron
+
+This guide outlines how to automatically update, upgrade, and restart your system using cron jobs on Ubuntu. The cron job will run daily without requiring manual intervention.
+
+## Steps to Set Up
+
+### Step 1: Configure the Cron Job
+1. Open the cron jobs file for editing:
+   ```bash
+   sudo crontab -e
+   ```
+
+2. Add the following cron job to run the updates, upgrades, and restart your system. This example runs it every day at 2 AM:
+   ```bash
+   0 2 * * * sudo apt update && sudo apt upgrade -y && sudo reboot
+   ```
+
+3. **Save and exit** the crontab editor:
+   - Press `Ctrl + X`
+   - Press `Y` to confirm
+   - Press `Enter` to save
+
+### Step 2: Allow `sudo` to Run Without Password
+Since the cron job uses `sudo`, you need to allow the system to run the `apt` and `reboot` commands without requiring a password.
+
+1. Edit the sudoers file to allow passwordless execution of the update, upgrade, and reboot commands:
+   ```bash
+   sudo visudo
+   ```
+
+2. Add the following line to the sudoers file to allow passwordless execution of `apt` and `reboot` commands:
+   ```bash
+   your_username ALL=NOPASSWD: /usr/bin/apt update, /usr/bin/apt upgrade, /sbin/reboot
+   ```
+
+   Replace `your_username` with your actual username (you can check your username by running `whoami`).
+
+3. **Save and exit** the editor:
+   - Press `Ctrl + X`
+   - Press `Y` to confirm
+   - Press `Enter` to save
+
+### Step 3: Test the Cron Job
+To verify the configuration works without requiring a password, manually run the following command:
+```bash
+sudo apt update && sudo apt upgrade -y && sudo reboot
+```
+
+If the update and upgrade commands run, and the system restarts without prompting for a password, your configuration is correct.
+
+## Final Setup Summary
+- The cron job will automatically:
+  - Run `sudo apt update` and `sudo apt upgrade -y`.
+  - Restart the system with `sudo reboot` if necessary.
+- The system will execute the cron job daily at 2 AM without requiring password input because `sudo` permissions have been configured to allow these commands without a password.
+
+This setup ensures your system is regularly updated and rebooted without manual intervention.
+
