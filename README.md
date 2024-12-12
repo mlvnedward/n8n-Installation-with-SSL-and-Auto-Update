@@ -82,8 +82,8 @@ This guide outlines the steps to deploy n8n on a GCP instance using Docker, Dock
    ```
 2. Create a persistent data directory:
    ```bash
-   sudo mkdir -p /var/n8n
-   sudo chown 1000:1000 /var/n8n
+   sudo mkdir -p /var/n8n-data
+   sudo chown 1000:1000 /var/n8n-data
    ```
 
 ### 2. Create the `docker-compose.yml` File
@@ -108,7 +108,7 @@ This guide outlines the steps to deploy n8n on a GCP instance using Docker, Dock
          - WEBHOOK_URL=https://your-domain.com/
          - GENERIC_TIMEZONE=Asia/Kolkata
        volumes:
-         - /var/n8n:/root/.n8n
+         - /var/n8n-data:/root/.n8n
    ```
 3. Save and close the file.
 
@@ -205,9 +205,9 @@ This guide outlines the steps to deploy n8n on a GCP instance using Docker, Dock
    ```
 2. **Verify Data Persistence**:
    - Create a workflow in n8n.
-   - Ensure workflow data is saved in `/var/n8n`:
+   - Ensure workflow data is saved in `/var/n8n-data`:
      ```bash
-     ls /var/n8n
+     ls /var/n8n-data
      ```
 3. **Test Updates**:
    - Stop and remove the n8n container:
@@ -220,7 +220,7 @@ This guide outlines the steps to deploy n8n on a GCP instance using Docker, Dock
 
 ## Final Notes
 
-- **Backups**: Regularly back up the `/var/n8n` directory to prevent data loss.
+- **Backups**: Regularly back up the `/var/n8n-data` directory to prevent data loss.
 - **Monitoring**: Use tools like UptimeRobot to monitor service availability.
 - **Support**: If issues occur, inspect container logs (`docker logs n8n`) and check the configuration files.
 
