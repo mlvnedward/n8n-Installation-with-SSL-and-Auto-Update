@@ -240,7 +240,7 @@ This guide outlines how to automatically update, upgrade, and restart your syste
 ### Step 1: Configure the Cron Job
 1. Open the cron jobs file for editing:
    ```bash
-   crontab -e
+   sudo crontab -e
    ```
 
 2. Add the following cron job to run the updates, upgrades, and restart your system. This example runs it every day at 2 AM:
