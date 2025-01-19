@@ -97,8 +97,9 @@ This guide outlines the steps to deploy n8n on a GCP instance using Docker, Dock
    ```
 3. Add the following content (replace `your-domain.com` with your domain):
    ```yaml
+   
    services:
-    n8n:
+   n8n:
     image: n8nio/n8n:latest
     container_name: n8n
     restart: unless-stopped
@@ -113,7 +114,7 @@ This guide outlines the steps to deploy n8n on a GCP instance using Docker, Dock
       - ~/n8n-data:/home/node/.n8n
 
 
-   ```
+    ```
 4. Save and close the file.
 
 ### 3. Start the n8n Container
