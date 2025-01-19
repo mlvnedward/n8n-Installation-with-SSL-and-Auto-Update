@@ -97,22 +97,24 @@ This guide outlines the steps to deploy n8n on a GCP instance using Docker, Dock
    ```
 3. Add the following content (replace `your-domain.com` with your domain):
    ```yaml
-   version: "3.1"
-
    services:
-     n8n:
-       image: n8nio/n8n:latest
-       container_name: n8n
-       restart: unless-stopped
-       ports:
-         - "5678:5678"
-       environment:
-         - N8N_HOST=your-domain.com
-         - WEBHOOK_TUNNEL_URL=https://your-domain.com/
-         - WEBHOOK_URL=https://your-domain.com/
-         - GENERIC_TIMEZONE=Asia/Kolkata
-       volumes:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=your-domain.com
+      - WEBHOOK_TUNNEL_URL=https://your-domain.com/
+      - WEBHOOK_URL=https://your-domain.com/
+      - GENERIC_TIMEZONE=Asia/Kolkata
+      - N8N_PROTOCOL=https
+      - N8N_PORT=443
+      - N8N_TRUST_PROXY=true
+    volumes:
       - ~/n8n-data:/home/node/.n8n
+
    ```
 4. Save and close the file.
 
