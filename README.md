@@ -111,10 +111,7 @@ services:
       - GENERIC_TIMEZONE=Asia/Kolkata
     volumes:
       - ~/n8n-data:/home/node/.n8n
- 
-  
-
-```
+ ```
 4. Save and close the file.
 
 ### 3. Start the n8n Container
