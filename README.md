@@ -114,7 +114,7 @@ services:
  
   
 
-    ```
+```
 4. Save and close the file.
 
 ### 3. Start the n8n Container
