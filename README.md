@@ -105,9 +105,9 @@ This guide outlines the steps to deploy n8n on a GCP instance using Docker, Dock
     ports:
       - "5678:5678"
     environment:
-      - N8N_HOST=melvinautomation.xyz
-      - WEBHOOK_TUNNEL_URL=https://melvinautomation.xyz/
-      - WEBHOOK_URL=https://melvinautomation.xyz/
+      - N8N_HOST=your-domain.com
+      - WEBHOOK_TUNNEL_URL=https://your-domain.com/
+      - WEBHOOK_URL=https://your-domain.com/
       - GENERIC_TIMEZONE=Asia/Kolkata
     volumes:
       - ~/n8n-data:/home/node/.n8n
