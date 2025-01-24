@@ -109,6 +109,7 @@ services:
       - WEBHOOK_TUNNEL_URL=https://your-domain.com/
       - WEBHOOK_URL=https://your-domain.com/
       - GENERIC_TIMEZONE=Asia/Kolkata
+      - EXECUTIONS_PROCESS=main
     volumes:
       - ~/n8n-data:/home/node/.n8n
  ```
