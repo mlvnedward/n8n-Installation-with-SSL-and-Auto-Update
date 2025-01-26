@@ -110,6 +110,10 @@ services:
       - WEBHOOK_URL=https://your-domain.com/
       - GENERIC_TIMEZONE=Asia/Kolkata
       - EXECUTIONS_PROCESS=main
+      - EXECUTIONS_TIMEOUT=3600
+      - EXECUTIONS_TIMEOUT_MAX=7200
+      - EXECUTIONS_DATA_PRUNE=true
+      - EXECUTIONS_DATA_MAX_AGE=90
     volumes:
       - ~/n8n-data:/home/node/.n8n
  ```
