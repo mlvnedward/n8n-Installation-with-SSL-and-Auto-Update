@@ -261,7 +261,7 @@ Since the cron job uses `sudo`, you need to allow the system to run the `apt` an
 
 1. Edit the sudoers file to allow passwordless execution of the update, upgrade, and reboot commands:
    ```bash
-   sudo visudo
+   sudo visudo -f /etc/sudoers.d/your_username
    ```
 
 2. Add the following line to the sudoers file to allow passwordless execution of `apt` and `reboot` commands:
@@ -279,9 +279,14 @@ Since the cron job uses `sudo`, you need to allow the system to run the `apt` an
 ### Step 3: Test the Cron Job
 To verify the configuration works without requiring a password, manually run the following command:
 ```bash
-sudo apt update && sudo apt upgrade -y && sudo reboot
+sudo visudo -c
 ```
 
+### Step 4: For 0440 Permission
+To fix permission run the following command:
+```bash
+sudo chmod 0440 /etc/sudoers.d/your_username
+```
 If the update and upgrade commands run, and the system restarts without prompting for a password, your configuration is correct.
 
 ## Final Setup Summary
