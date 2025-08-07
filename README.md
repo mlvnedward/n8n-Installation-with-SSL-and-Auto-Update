@@ -287,7 +287,6 @@ To fix permission run the following command:
 ```bash
 sudo chmod 0440 /etc/sudoers.d/your_username
 ```
-If the update and upgrade commands run, and the system restarts without prompting for a password, your configuration is correct.
 
 ## Final Setup Summary
 - The cron job will automatically:
